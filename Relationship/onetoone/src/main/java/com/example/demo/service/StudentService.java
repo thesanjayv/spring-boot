@@ -6,7 +6,6 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.demo.entity.Address;
 import com.example.demo.entity.Student;
 import com.example.demo.repo.StudentRepo;
 
@@ -30,30 +29,31 @@ public class StudentService {
     //updating
     public Student updatemethod(Integer id, Student student) {
         Optional<Student> op = studentRepo.findById(id);
-        if (op.isPresent()) {
+        if(op.isPresent()){
             Student toUpdate = op.get();
             toUpdate.setName(student.getName());
             toUpdate.setSalary(student.getSalary());
+            toUpdate.getAddress().setCity(student.getAddress().getCity());
+            toUpdate.getAddress().setCountry(student.getAddress().getCountry());
 
-            if (toUpdate.getAddress() != null && toUpdate.getAddress() != null) {
-                Address existing = toUpdate.getAddress();
-                Address newData = toUpdate.getAddress();
-
-                existing.setCity(newData.getCity());
-                existing.setCountry(newData.getCountry());
-                return studentRepo.save(student);
-            }
+            return studentRepo.save(toUpdate);
         }
         return null;
     }
 
     //deleteById
-    public void deleteId(Integer id) {
-        studentRepo.deleteById(id);
+    public String deleteId(Integer id) {
+        Optional<Student> op = studentRepo.findById(id);
+        if(op.isPresent()){
+            studentRepo.deleteById(id);
+            return "Id Deleted successfully";
+        }
+        return "Id not present";
     }
 
-    //deletingTotalEntity
-    public void deleteMethod(Student student) {
-        studentRepo.delete(student);
+    //deletingAll
+    public String deleteMethod() {
+        studentRepo.deleteAll();
+        return "Deleted Completely!";
     }
 }

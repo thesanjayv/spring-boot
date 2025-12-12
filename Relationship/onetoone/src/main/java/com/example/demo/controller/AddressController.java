@@ -12,39 +12,46 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.demo.entity.Student;
-import com.example.demo.service.StudentService;
+import com.example.demo.service.AddressService;
+import com.example.demo.service.addressService;
 
 
 @RestController
-@RequestMapping("/student")
-public class MyController {
+@RequestMapping("/address")
+public class AddressController {
     
     @Autowired
-    private StudentService studentService;
+    private AddressService addressService;
 
     //create
     @PostMapping
-    public Student doPost(@RequestBody Student student){
-        return studentService.createMethod(student);
+    public Address doPost(@RequestBody Address address){
+        return AddressService.createMethod(address);
     }
 
     //read
     @GetMapping
-    public List<Student> doGet(){
-        return studentService.getMethod();
+    public List<Address> doGet(){
+        return AddressService.getMethod();
     }
 
     //update
     @PutMapping("/{id}")
-    public Student doUpdate(@PathVariable int id, @RequestBody Student student){
-        return studentService.updatemethod(id, student);
+    public Address doUpdate(@PathVariable int id, @RequestBody Address address){
+        return addressService.updatemethod(id, address);
     }
 
     //delete
     @DeleteMapping("/{id}")
     public String doDelete(@PathVariable Integer id){
-        studentService.deleteId(id);
-        return "Delted the id";
+        String message = addressService.deleteId(id);
+        return message;
+    }
+
+    //delete
+    @DeleteMapping
+    public String doDeleteAll(){
+        return addressService.deleteMethod();
+
     }
 }
