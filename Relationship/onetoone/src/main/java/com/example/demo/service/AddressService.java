@@ -7,38 +7,69 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.entity.Address;
+import com.example.demo.entity.Student;
 import com.example.demo.repo.AddressRepo;
+import com.example.demo.repo.StudentRepo;
 
 @Service
 public class AddressService {
-    
+
     @Autowired
     private AddressRepo addressRepo;
 
-    public Address createMethod(Address address){
-        return addressRepo.save(address);
+    @Autowired
+    private StudentRepo studentRepo;
+
+    public Address createMethod(Address address) {
+        addressRepo.save(address);
+        Student student = address.getStudent();
+        student.setAddress(address);
+        studentRepo.save(student);
+        return address;
     }
 
     //reading
-    public List<Address> getMethodService(){
+    public List<Address> getMethodService() {
         return addressRepo.findAll();
     }
 
     //updating
-    public Address updatemethod(Integer id, Address address){
+    public Address updatemethod(Integer id, Address address) {
         Optional<Address> op = addressRepo.findById(id);
-        if(op.isPresent()){
-            return addressRepo.save(address);
+        if (op.isPresent()) {
+            Address oldAddress = op.get();
+            oldAddress.setCity(address.getCity());
+            oldAddress.setCountry(address.getCountry());
+            oldAddress.getStudent().setName(address.getStudent().getName());
+            oldAddress.getStudent().setSalary(address.getStudent().getSalary());
+
+            return addressRepo.save(oldAddress);
         }
         return null;
     }
 
     //deleteById
-    public void deleteId(Integer id){
-        addressRepo.deleteById(id);
+    public String deleteId(Integer id) {
+        Optional<Address> op = addressRepo.findById(id);
+        if (op.isPresent()) {
+            // addressRepo.deleteById(id);
+            // return "Deleted by ID";
+
+            Address address = op.get();
+            Student student = address.getStudent();
+            if (student != null) {
+                student.setAddress(null);
+                studentRepo.save(student);
+            }
+            addressRepo.deleteById(id);
+            return "Deleted by ID";
+        }
+        return "Not Found";
     }
+
     //deletingTotalEntity
-    public void deleteMethod(Address Address){
-        addressRepo.delete(Address);
+    public String deleteMethod() {
+        addressRepo.deleteAll();
+        return "Deleted completely!!";
     }
 }

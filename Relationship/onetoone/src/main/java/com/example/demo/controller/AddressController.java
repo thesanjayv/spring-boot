@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demo.entity.Address;
 import com.example.demo.service.AddressService;
-import com.example.demo.service.addressService;
 
 
 @RestController
@@ -26,13 +26,13 @@ public class AddressController {
     //create
     @PostMapping
     public Address doPost(@RequestBody Address address){
-        return AddressService.createMethod(address);
+        return addressService.createMethod(address);
     }
 
     //read
     @GetMapping
     public List<Address> doGet(){
-        return AddressService.getMethod();
+        return addressService.getMethodService();
     }
 
     //update
@@ -51,7 +51,7 @@ public class AddressController {
     //delete
     @DeleteMapping
     public String doDeleteAll(){
+        
         return addressService.deleteMethod();
-
     }
 }
