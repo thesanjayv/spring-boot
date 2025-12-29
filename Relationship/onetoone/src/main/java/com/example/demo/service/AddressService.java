@@ -21,11 +21,14 @@ public class AddressService {
     private StudentRepo studentRepo;
 
     public Address createMethod(Address address) {
-        addressRepo.save(address);
-        Student student = address.getStudent();
-        student.setAddress(address);
-        studentRepo.save(student);
-        return address;
+        //addressRepo.save(address);
+        // Student student = address.getStudent();
+        // student.setAddress(address);
+        // studentRepo.save(student);
+        // return address; 
+        address.getStudent().setAddress(address);
+        Student s=studentRepo.save(address.getStudent());
+        return s.getAddress();
     }
 
     //reading
@@ -37,13 +40,15 @@ public class AddressService {
     public Address updatemethod(Integer id, Address address) {
         Optional<Address> op = addressRepo.findById(id);
         if (op.isPresent()) {
-            Address oldAddress = op.get();
-            oldAddress.setCity(address.getCity());
-            oldAddress.setCountry(address.getCountry());
-            oldAddress.getStudent().setName(address.getStudent().getName());
-            oldAddress.getStudent().setSalary(address.getStudent().getSalary());
+            // Address oldAddress = op.get();
+            // oldAddress.setCity(address.getCity());
+            // oldAddress.setCountry(address.getCountry());
+            // oldAddress.getStudent().setName(address.getStudent().getName());
+            // oldAddress.getStudent().setSalary(address.getStudent().getSalary());
+            address.setAddressId(id);
+            //address.getStudent().setAddress(address);
 
-            return addressRepo.save(oldAddress);
+            return addressRepo.save(address);
         }
         return null;
     }
@@ -65,7 +70,6 @@ public class AddressService {
             return "Deleted by ID";
         }
         return "Not Found";
-    }
 
     //deletingTotalEntity
     public String deleteMethod() {

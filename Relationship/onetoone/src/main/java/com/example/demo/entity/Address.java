@@ -1,5 +1,7 @@
 package com.example.demo.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -16,7 +18,8 @@ public class Address {
     private String city;
     private String country;
 
-    @OneToOne(mappedBy="address", cascade=CascadeType.PERSIST)
+    @OneToOne(mappedBy="address")
+    @JsonBackReference
     private Student student;
     public Address(){}
     public Address(String city, String country, Student student) {
